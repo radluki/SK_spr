@@ -1,0 +1,126 @@
+zad A
+Ruter #show ipv6 ?
+
+\\Router 1
+
+conf t
+int fa 0/1
+ipv6 address 1111:2222:1111:2222::/64 eui-64
+no sh
+exit
+int loopback 1
+ipv6 address 1:2:1::/64 eui-64
+no shut
+exit
+ipv6 route 1:2:2::/64 adres_fa0/1r2
+
+\\Router 2
+int fa 0/1
+ipv6 address 1111:2222:1111:2222::/64 eui-64
+no sh
+exit
+int loopback 1
+ipv6 address 1:2:2::/64 eui-64
+no shut
+exit
+ipv6 route 1:2:1::/64 adres_fa0/1r1
+
+//testy
+show ipv6 int brief
+show ipv6 interface loopback 1
+
+//diagnostyka
+Router#debug ipv6 icmp
+Router#ping ipv6 2:1::1
+Router#ping ipv6 2:1::1 source 1:1::1
+Router#traceroute ipv6 2:1::1
+Router#show ipv6 route
+Router(config)#ipv6 route 3:1::/64 2:1::1
+
+zad B
+conf t
+
+\\router 1 2
+ipv6 unicast-routing
+ipv6 router rip ripper
+int fa 0/1
+ipv6 rip ripper enable
+no shutdown
+exit
+
+
+\\testy
+Router#show ipv6 int fa 0/0
+Router#show ipv6 route
+Router#show ipv6 rip
+Router#clear ipv6 route *
+
+zad C
+\\R1
+conf t
+no ipv6 router rip ripper
+ipv6 router ospf 10
+router-id 1.1.1.1
+exit
+interface FastEthernet 0/1
+ipv6 ospf 10 area 0
+exit
+int loopback 1
+ipv6 ospf 10 area 0
+
+
+\\R2
+conf t
+no ipv6 router rip ripper
+ipv6 router ospf 10
+router-id 1.1.1.2
+exit
+interface FastEthernet 0/1
+ipv6 ospf 10 area 0
+int loopback 1
+ipv6 ospf 10 area 1
+
+\\testy
+Router# debug ipv6 ospf
+Router#debug ipv6 ospf packet
+Router#debug ipv6 ospf hello
+Router#sh ipv6 protocols
+Router#sh ipv6 route
+Router#sh ipv6 ospf neighbor
+Router#show ipv6 ospf interface
+Router#sh ipv6 ospf database
+sh ipv6 ospf border-routers
+\\eigrp
+Router(config)#no ipv6 router ospf 10
+Router(config)# ipv6 router eigrp 1234
+Router(config)#int fa 0/0
+Router(config-if)#ipv6 eigrp 10
+
+zad D
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

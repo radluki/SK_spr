@@ -1,0 +1,20 @@
+zad A
+Połączyliśmy 2 hosty do switcha w którym włączyliśmy 
+ip igmp snooping, aby multicast nie zapychał sieci.
+Żeby snooping działał switch musiał być połączony z 
+routerem w którym skonfigurowaliśmy:
+ip multicast-routing
+int fa 0/0
+ip addr 200.200.200.1 255.255.255.0
+ip pim dense-mode
+no sh
+
+zad B
+W każdym routerze włączyliśmy multicast-routing, każdemu interfejsowi włączyliśmy ip pim dense-mode,
+adresy, skonfigurowaliśmy system routowania eigrp.
+Włączyliśmy vlc w oknie komend. Dużo czasu straciliśmy na zamianę adresów ip hostów oraz połączenie całego układu za pomocą kabli skrosowanych.
+
+zad C
+W każdym interfejsie zmieniliśmy dense-mode na sparse-mode: ip pim sparse -mode.
+Każdemu routerowi podaliśmy adres interfejsu radezvous point: ip pim rp-address 200.200.200.2
+Sparse mode w przeciwieństwie do dense mode nie generuje niepotrzebnego ruchu w sieci. Informacje o źródłach przechowywane są w RP, każdy router ma jego adres. Gdy host zgłasza się do grupy ip multicast router pobiera ruch od RP i przekazuje go hostowi.

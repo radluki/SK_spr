@@ -1,0 +1,45 @@
+VLAN
+	Switch#show vlan
+	Switch(config)#vlan 20
+	Switch(config-vlan)#exit
+Przypisanie portów do VLAN
+	Switch(config)#interface fa0/2
+	Switch(config-if)#no shutdown
+	Switch(config-if)#switchport mode access
+	Switch(config-if)#switchport access vlan 20
+	Switch(config)#interface range fa0/15 - 17
+	Switch(config-if-range)#switchport mode access
+	Switch(config-if-range)#switchport access vlan 20 //potrzebne
+Po kolei:
+	Switch#vlan 3
+	Switch(config)#int vlan 3
+	Switch(config-if)#ip address 192.168.11.1 255.255.255.0
+	Switch(config)#int range fa 0/1-2
+	Switch(config-if-range)#switchport access vlan 3
+	Komputery muszą być w sieci
+VLAN trunk
+	Switch(config)#interface fa0/1
+	Switch(config-if)#no shutdown
+	Switch(config-if)#switchport mode trunk
+	Switch(config-if)#switchport trunk allowed vlan 1-100
+	Switch(config-if)#switchport trunk allowed vlan remove 10
+	Switch#show running-config
+	Switch#show interface trunk
+	Switch#show interface fa 0/1 switchport
+	Switch#show interface fa 0/1 status
+	Switch(config)#int fa 0/1
+	Switch(config-if)#switchport trunk native vlan 10
+VTP (virtual trunking protocol)
+	Switch(config)#vtp domain domena
+	Switch(config)#vtp mode server
+	Switch(config)#vtp domain domena
+	Switch(config)#vtp mode client
+	Switch#show vlan
+	Switch#debug sw-vlan vtp events
+	Switch#show vtp status
+	Switch(config)#vtp mode transparent
+	Switch#show vtp domain // nie działa?
+	Switch#show vtp ?
+	Switch(config)#vtp password haslo
+	żeby vtp działało musi być włączony trunk
+	

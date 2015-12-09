@@ -1,0 +1,23 @@
+zad A
+Ustawiliśmy default gate w obu routerach i ping działał. Usunęliśmy deafoult gaty i włączyliśmy rip v2. Tablice były aktualizowane po uzupełnieniu networków
+zad B
+Włączyliśmy ospf do networków area 0 dodaliśmy 2 loopbacki i interfejsy łączące, wskazaliśmy sąsiadów, sprawdziliśmy pingiem działanie systemu.
+Podzieliliśmy wszystko na 3 area.  Stworzyliśmy  virtual-link w tym samym router ospf 150. Router ID wzięliśmy z do sh ip protocol. Oba rutery zostały oznaczone jako area border router. Ping zadziałał. W ip route mamy sygnaturę O IA.
+zad C Redystrybucja tras pomiędzy protokołami IGP
+Skonfigurowaliśmy odpowiednio 3 routery, do dwóch skrajnych dodaliśmy loopbacki. (1-2 rip) (2-3 ospf) Tylko router 2 miał pełną listę routingu. Zmusiliśmy R2 do redystrybucji rip do ospf i ospf do rip. 
+R2(config)#router rip
+R2(config-router)#redistribute ospf 4 metric 11 // rip widzi ospf
+R2(config)#router ospf 4
+R2(config-router)# redistribute rip metric 120 subnets //ospf widzi rip
+Sprawdziliśmy działanie, układ działał.
+zad D Tunnel GRE
+Połączyliśmy 3 routery szeregowo. Router R2 symulował internet, nie był przez nas modyfikowany. W routerach 1 i 3 włączyliśmy loopbacki, ustawiliśmy adresy interfejsów i powłączaliśmy je. Uruchomiliśmy Tunnel 0.
+R1(config)#interface Tunnel 0
+R1(config-if)#tunnel source FastEthernet0/0
+R1(config-if)#ip address 192.168.5.1 255.255.255.0
+R1(config-if)#tunnel destination 200.200.201.1
+R3(config)#interface Tunnel 0
+R3(config-if)#tunnel source FastEthernet0/0
+R3(config-if)#ip address 192.168.5.2 255.255.255.0
+R3(config-if)#tunnel destination 200.200.200.1
+Każdej końcówce tunelu przypisaliśmy odzielny adres ip inny niż adres interfejsu fizycznego kończącego tunnel. Uruchomiliśmy w R1 i R3 ospf, a do networków dodaliśmy sieć tunnela 0 oraz sieci loopbacków (wszystko w area 0). Na samym początku ustawiliśmy jeszcze statyczną ścieżkę routowania w R1 i R3 między fizycznymi końcami tunnelu. Tablice zostały uzupełnione, a ping między loopbackami powiódł się

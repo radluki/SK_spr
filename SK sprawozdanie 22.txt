@@ -1,0 +1,9 @@
+Ćw 22
+zad A
+Podstawowe czynności konfiguracyjne, przypomnienie.
+zad B
+Zadanie polegało na stworzeniu paru VLAN, przypisaniu im interfejsów oraz sprawdzeniu czy różne wilany mogą się ze sobą komunikować. Wniosek VLAN stanowi oddzielną odseparowaną sieć.
+zad C
+Sprawdziliśmy komunikację między dwoma switchami z VLAN 1-2 i podpiętymi do nich komputerami, gdy łącze należy do jednego z VLAN oraz gdy łącze jest skonfigurowane jako trunk przepuszczający oba VLAN-y. W pierwszym przypadku łączność otrzymaliśmy dla jednego VLAN, a w drugim dla obu. 
+zad D
+Zadanie polegało na założeniu domeny VTP w obu switch-ach, ustawieniu jednego z nich na server, a drugiego na client, stworzeniu kilku VLAN na serwerze i zaobserwowaniu propagacji informacji o VLAN-ach na cliencie. Udało się to wtedy gdy łącze było skonfigurowane jako trunk. Sprawdziliśmy także status transparent, który nie uaktualnia własnej bazy VLAN, ale tylko przepuszcza informację o zmianach na serwerze.

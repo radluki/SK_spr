@@ -1,0 +1,14 @@
+Switch 
+	Przełącznik nie rutujący ("warstwy drugiej ISO OSI") może posiadać adres IP do celów administracyjnych (telnet, http, ssh)
+	Adresu IP nie posiadają porty fizyczne switcha.
+	VLAN-y posiadają adresy IP
+	Komunikacja między portami różnych VLAN nie jest możliwa
+	VLAN1 - domyślny VLAN
+	możemy pingować port poprzez adres VLAN
+	
+	Aby konfigurować VLAN przynajmniej jeden port musi być w stanie Forwarding(aktywny)
+	Tryb pracy portu: access(->DTE), trunk(->DCE),dynamic(domyślny, protokół DTP). Od tego zależy ramkowanie
+	
+Terminale wirtualne VTY - jest ich zwykle 16
+	Gdy użytkownik zdalny nawiązuje połączenie z przełącznikiem np. przez telne, to przełącznik alokuje dla niego jedną linię vty
+	Protokół STP (spanning tree) odnosi się do VLAN

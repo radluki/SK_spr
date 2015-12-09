@@ -1,0 +1,31 @@
+zad A
+Polegało na zaznajomieniu się z adresacją ipv6, wypróbowaniu automatycznego uzupełniania adresu maciem, statycznym routowaniu. Połączyliśmy 2 routery interfejsom nadaliśmy adresy ipv6, do R1 i R2 dodaliśmy loopbacki, nadaliśmy im ipv6 add i w obu routerach zdefiniowaliśmy statyczne reguły routowania.
+
+zad B
+Skasowaliśmy statyczne reguły routowania. Włączyliśmy: ipv6 unicast-routing, 
+ipv6 router rip ripper. Interfejsy fizyczne i loopbacki włączyliśmy do routowania rip.
+int fa 0/1
+ipv6 rip ripper enable 
+W tablicach routowania pojawiły się reguły z sygnaturą R, ping przeszedł.
+show ipv6 route
+
+zad C
+no ipv6 router rip ripper
+ipv6 router ospf 10
+router-id 1.1.1.1
+Wyłączyliśmy rip, włączyliśmy ospf. Zdefiniowaliśmy router-id, bo adresy ip nie zostały przez nas przydzielone. W R1 oba interfejsy przypisaliśmy do area 0: ipv6 ospf 10 area 0.
+W R2 fa 0/0 do area 0, a loopback do area 1. W R1 pojawiła się sygnatura z OI, R2 O. Ping zadziałał, R2 oznaczony został jako area border router.
+
+zad D
+Skonfigurowaliśmy 2 sieci ipv6 z ospf 10 area 0.
+Między routerami 2,3,4 zastosowaliśmy adresację ip, routowanie rip. Aby umożliwić łączność między oboma sieciami ipv6 musieliśmy utworzyć tunnel.
+
+interface Tunnel0
+no ip address
+ipv6 address 3111:1:1:1:1:1:1:1111/112
+ipv6 ospf 10 area 0
+tunnel source FastEthernet 0/0
+tunnel destination 200.200.201.2
+tunnel mode ipv6ip
+exit
+Analogicznie na drugim końcu. Maski obu końców tunelu nie zgadzają się, ale układ działa. Tablice routowania po obu stronach zostały uaktualnione, jeśli tylko tunel dodamy do protokołu routowania.

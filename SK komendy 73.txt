@@ -1,0 +1,98 @@
+Router(config)#access-list 5 permit 10.0.0.0 0.0.0.255
+Router(config)#ip nat inside source list 5 interface fa 0/1 overload
+RouterNAT(config)#int fa 0/0
+RouterNAT(config-if)#ip nat inside
+RouterNAT(config)#int fa 0/1
+RouterNAT(config-if)#ip nat outside
+
+wireshark
+Router#debug ip icmp //odbiorca
+Porównać adresy wireshark i icmp
+
+\\testy
+RouterNAT#show ip nat translations
+RouterNAT#show ip access-lists
+
+RouterNAT(config)#no ip nat inside source list 5 interface fa 0/1 overload
+RouteNAT(config)#ip nat inside source list 5 interface fa 0/0 overload
+W takiej konfiguracji datagramy wychodzące z rutera do sieci outside powinny
+posiadać adres interfejsu fa 0/0 zamiast fa 0/1 jako adres IP nadawcy (tryb
+overload nadal jest włączony)
+
+
+
+RouterNAT(config)# ip nat inside source static 10.0.0.3 200.200.200.3
+RouterNAT(config)# ip nat inside source static 10.0.0.4 200.200.200.4
+
+definiujemy regułę rutowania:
+Router(config)# ip route 200.200.200.3 255.255.255.255 200.200.200.1
+Router(config)# ip route 200.200.200.4 255.255.255.255 200.200.200.1
+Router(config)# ip route 200.200.202.1 255.255.255.255 200.200.200.1
+
+RouterNAT(config)# ip nat pool pula 200.200.201.1 200.200.201.254
+netmask 255.255.255.0
+RouterNAT(config)# access-list 5 permit 10.0.0.0 0.0.0.255
+RouterNAT(config)#ip nat inside source list 5 pool pula overload
+RouterNAT#show ip nat translations
+RouterNAT#show ip nat statistics
+Router(config)# ip route 200.200.201.0 255.255.255.0 200.200.200.1
+
+Uwaga: Analogicznie jak w poprzednim zadaniu nad fizycznym interfejsem
+outside rutera NAT mogą być stworzone dwie sieci - rzeczywista
+(200.200.200.0/24) i NAT outside powstała na bazie puli adresów
+200.200.201.0/24. W sieci outside można rutować tylko do interfejsu fizycznego
+rutera NAT (200.200.200.1), a nie do sieci będącej skutkiem translacji (która
+fizycznie nie istnieje). Dlatego w innym ruterze podłączonym do segmentu sieci
+outside definiujemy regułę:
+Router(config)# ip route 200.200.201.0 255.255.255.0 200.200.200.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

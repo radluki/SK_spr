@@ -1,0 +1,26 @@
+int fa 0/0 
+	ip address
+	no shutdown
+line vty 0 4
+	transport input ssh
+username name privilege 15 secret haslo
+aaa new-model
+ip domain-name name
+crypto key-rsa
+enable password haslo
+
+// ssh -l luk 192.168.10.1
+
+xxxxxxxxxxxxxx
+dhcp konfiguracja
+xxxxxxxxxxx
+Router(config)#service dhcp
+Router(config)#ip dhcp pool nazwa
+Router(dhcp-config)#network 10.10.10.0 255.255.255.0
+Router(dhcp-config)#ip dhcp excluded-address 10.10.10.10 10.10.10.20
+Router(config-if)#ip addr 10.10.10.1 255.255.255.0
+
+R2(config)#interface FastEthernet 0/0
+R2(config-if)#ip address dhcp
+
+Router#show ip dhcp binding

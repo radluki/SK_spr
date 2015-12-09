@@ -1,0 +1,79 @@
+zad A
+Switch(config)#ip igmp snooping
+
+Router(config)#ip multicast-routing
+Router(config)# int fa 0/0
+Router(config-if)#ip pim dense-mode
+
+włączenie źródła multicast
+vlc.exe plik :sout=#rtp{dst=224.1.1.1,port=5004,mux=ts,ttl=10} :sout-all :sout-keep
+–loop
+
+włączenie odtwarzacza strumieni multimedialnych 
+vlc.exe rtp://224.1.1.1:5004
+
+Sprawdzenie protokołu IGMP
+Switch#show ip igmp snooping
+Switch#show ip igmp snooping group
+
+Informacje o routerze zarządzającym k. IGMP
+Switch#show ip igmp snooping querier
+Switch#show ip igmp snooping mrouter
+
+kasowanie grup IGMP
+Switch#clear ip igmp group
+
+włącz wireshark
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

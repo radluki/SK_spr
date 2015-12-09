@@ -1,0 +1,9 @@
+ #!/bin/bash 
+t=".txt"
+while [ "$1" != "" ]; do
+    mv "$1" "$1$t"
+    
+    # Shift all the parameters down by one
+    shift
+
+done

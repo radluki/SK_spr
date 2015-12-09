@@ -1,0 +1,39 @@
+Router#ping 200.200.200.1 source 100.100.100.1
+Router(config)#ip routing
+Router(config)#ip classless
+Router(config)#router rip
+Router(config-router)#network 200.200.100.0
+Router(config-router)#network 200.200.200.0
+Router#show ip route
+Router#show ip protocols
+Router#debug ip rip
+Router#debug ip routing
+
+wersja 2 rip
+Router(config-router)#version 2
+Router(config)#key chain nazwa
+Router(config-keychain)#key 2
+Router (config-keychain-key)#key-string 0987654321
+Router (config-if)#ip rip authentication key-chain nazwa
+Router(config-if)#ip rip authentication mode md5
+
+odczytywanie komunikatów wersji 1
+Router1(config-if)#ip rip send version 2
+Router2(config-if)#ip rip receive version 1
+
+statyczne dodanie drogi awaryjnej o niskim priorytecie
+Router(config)#ip route 200.200.200.0 255.255.255.0 200.200.100.5 150
+
+
+
+
+
+
+
+
+
+
+
+
+
+

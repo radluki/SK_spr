@@ -1,0 +1,13 @@
+zad C
+Zadanie polegało na skonfigurowaniu routera R1 jako serwera DHCP. Do jednego interfejsu podpieliśmy komputer, a do drugiego router R2 i ustawiliśmy w porcie R2 łączącym go z R1 add ip dhcp. W wyniku tego router R1 przyznawał adresy IP komputerowi oraz interfejsowi routera R2.
+W routerach uzupełniliśmy tablice rip oraz wskazaliśmy sąsiadów. W R1 ustawiliśmy helpera za pomocą Router(config-if)#ip helper-address 200.200.200.1, co pozwoliło na automatyczne przypisanie adresów ip do komputera podłączonego do interfejsu routera R2. Aby można było pingować z jednego komputera do drugiego poprzez 2 routery trzeba było w każdym poolu zadeklarować default-router add ip, co dodawało w PC-tach default gateway.
+zad D
+Dzięki skonfigurowaniu serwera ssh na routerze mogliśmy się połączyć z nim w trybie konfiguracji poprzez kabel fast ethernet.
+zad E
+Legacy Bridging
+Wyłączyliśmy routowanie w R1 jako gateway komputerów podłączonych do R1 ustawiliśmy port R2 łączący go z R1. R1 działał wtedy jak switch, wszystkie interfejsy R1 należały do tej samej sieci i tego samego bridge-group. Wtedy była łączność. Gdy interfejs przepisaliśmy do innego bridge-group, albo usuneliśmy go z bridge-group to utraciliśmy łączność.
+CRB
+Po ustawieniu router rip neighbor i network oraz utworzeniu bridge-group 1 na dwóch interfejsach mieliśmy podłączone jeszcze 2 dodatkowe komputery do R1 (poza bridge group) i do R2. Łączność była wszędzie poza portami należącymi do bridge group. Grupa ta była odizolowana. Jednak można było pingować na interfejsy R1 należące do bridge-group, natomiast gdy pingowało się do komputerów podłączonych do interfejsów bridge-group 1 to otrzymywaliśmy "192.168.20.10 icmp_seq=1 timeout".
+IRB
+Zachowaliśmy układ z konfiguracji CRB. Za default gateway PC-tów podpiętych do bridge-group przyjęliśmy adres BVI. Numer BVI musi być zgodny z numerem bridge-group, sieć bridge'a należy dopisać do tablicy rip i w ten sposób można uzyskać łączność. Bridge-group zachowuje się jak oddzielny switch połączony do routera przez BVI.
+

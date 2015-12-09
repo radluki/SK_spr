@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "You start with $# positional parameters"
+
+for i in "$@"; do
+    echo $i
+done
+
+# Loop until all parameters are used up
+while [ "$1" != "" ]; do
+    echo "Parameter 1 equals $1"
+    echo "You now have $# positional parameters"
+
+    # Shift all the parameters down by one
+    shift
+
+done
+
+for i in word1 word2 word3; do
+    echo $i
+done
+
+

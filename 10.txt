@@ -1,0 +1,166 @@
+A ////////////////////////////////////////////////////////
+
+Router
+conf t
+ip multicast-routing
+int fa 0/0
+ip addr 200.200.200.1 255.255.255.0
+ip pim dense-mode
+no sh
+exit
+
+Switch
+conf t
+ip igmp snooping
+
+vlc.exe plik :sout=#rtp{dst=224.1.1.1,port=5004,mux=ts,ttl=10} :sout-all :sout-keep
+--repeat // czy napewno plik
+
+vlc.exe rtp://224.1.1.1:5004
+
+//testy
+
+Switch
+show ip igmp snooping
+show ip igmp snooping group
+
+show ip igmp snooping querier
+show ip igmp snooping mrouter
+
+clear ip igmp group
+
+no ip igmp snooping
+
+ip igmp snooping
+
+B//////////////////
+
+Ruter 1
+conf t
+ip multicast-routing
+int fa 0/0
+ip addr 200.200.200.1 255.255.255.0
+ip pim dense-mode
+no sh
+exit
+int fa 0/1
+ip addr 200.200.210.1 255.255.255.0
+ip pim dense-mode
+no sh
+exit
+router eigrp 100
+net 200.200.210.0
+net 200.200.200.0
+
+Ruter 2 (œrodkowy)
+conf t
+ip multicast-routing
+int fa 0/0
+ip addr 200.200.200.2 255.255.255.0
+ip pim dense-mode
+no sh
+exit
+int fa 0/1
+ip addr 200.200.201.1 255.255.255.0
+ip pim dense-mode
+no sh
+exit
+router eigrp 100
+net 200.200.201.0
+net 200.200.200.0
+
+Ruter 3
+conf t
+ip multicast-routing
+int fa 0/0
+ip addr 200.200.201.2 255.255.255.0
+ip pim dense-mode
+no sh
+exit
+int fa 0/1
+ip addr 200.200.211.1 255.255.255.0
+ip pim dense-mode
+no sh
+exit
+router eigrp 100
+net 200.200.201.0
+net 200.200.211.0
+
+
+
+vlc.exe plik :sout=#rtp{dst=224.1.1.1,port=5004,mux=ts,ttl=10} :sout-all :sout-keep
+--repeat // czy napewno plik
+
+vlc.exe rtp://224.1.1.1:5004
+
+testy
+show ip mroute
+show ip igmp groups
+show ip igmp membership
+
+
+clear ip mroute *
+clear ip igmp groups
+
+Router1(config)#int fa 0/0
+ip igmp join-group 230.200.200.1
+Router2#ping 230.200.200.1
+
+
+C//////////////////////////////////
+
+Ruter 1
+ip multicast-routing
+int fa 0/0
+ip addr 200.200.200.1 255.255.255.0
+ip pim sparse-mode
+no sh
+exit
+int fa 0/1
+ip addr 200.200.210.1 255.255.255.0
+ip pim sparse -mode
+no sh
+exit
+ip pim rp-address 200.200.200.2
+router eigrp 100
+net 200.200.210.0
+net 200.200.200.0
+
+Ruter 2 (œrodkowy, Rendezvous Point)
+ip multicast-routing
+int fa 0/0
+ip addr 200.200.200.2 255.255.255.0
+ip pim sparse -mode
+no sh
+exit
+int fa 0/1
+ip addr 200.200.201.1 255.255.255.0
+ip pim sparse -mode
+no sh
+exit
+ip pim rp-address 200.200.200.2
+router eigrp 100
+net 200.200.201.0
+net 200.200.200.0
+
+Ruter 3
+ip multicast-routing
+int fa 0/0
+ip addr 200.200.201.2 255.255.255.0
+ip pim sparse -mode
+no sh
+exit
+int fa 0/1
+ip addr 200.200.211.1 255.255.255.0
+ip pim sparse -mode
+no sh
+exit
+ip pim rp-address 200.200.200.2
+router eigrp 100
+net 200.200.201.0
+net 200.200.211.0
+
+testy
+sh ip pim rp
+sh ip pim rp mapping
+sh ip pim nei

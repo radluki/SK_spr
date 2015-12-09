@@ -1,0 +1,93 @@
+ćw 021
+	zad A - Konfiguracja switcha
+Konfiguracja VLAN:
+	Switch(config)#interface vlan1
+	Switch (config-if)#ip address 192.168.123.199 255.255.255.0
+	Switch (config-if)#no shutdown
+Ustalenie trybu pracy portu:
+	Switch(config)#interface fa 0/5
+	Switch(config-if)#switchport mode access
+Sprawdzenie ustawień
+	Switch#show ip interface brief
+	Switch#show ip interface vlan 1
+	Switch#show running-config
+Wyłączenie wysyłania zapytań do DNS:
+	Switch(config)#no ip domain-lookup
+Zmiana nazwy hosta:
+	Switch(config)#hostname s0
+Operacje na pamięci
+	Switch#write memory
+	Switch#write erase
+Debugowanie:
+	Switch# debug ip icmp
+	Switch#no debug all
+Konfiguracja VTY
+        Switch(config)#line vty 0 15
+        Switch(config-line)#password haslo
+        Switch(config-line)#login // pod warunkiem że Switch(config)#no aaa new-model
+        Switch(config-line)#transport input telnet
+telnet:
+        telnet adres_ip
+        hasło vty
+        en + hasło switcha
+Hasło do trybu uprzywilejowanego exec:
+        Switch(config)#enable password haslo
+        Switch(config)#no enable password   
+SSH
+        Switch(config)#ip domain-name domena
+        Switch(config)#hostname Mojhost 
+        Switch(config)#crypto key generate rsa 
+        Switch#show ip ssh
+SSH łączenie
+        ssh -l login address ip
+SSH - lokalny system kont
+        Switch(config)#aaa new-model
+        Switch(config)#username nazwa priv 15 password 0/7 (jaw/szyf) haslo
+        Switch(config)#line vty 0 15
+        Switch(config-line)#transport input ssh
+        Switch(config-line)#no transport input telnet
+        Switch(config-line)#transport input none
+Ograniczenia dostępu do vty
+        Switch(config)#access-list 55 permit 192.168.1.0 0.0.0.255
+        Switch(config)#line vty 0 15
+        Switch(config-line)#access-class 55 in
+        Switch(config-line)#exit
+Ograniczenia dostępu do portów vlan
+        Switch(config)#mac-address-table static 0013.72b9.89fe vlan 1 drop
+
+ZADANIE D
+Adresy MAC
+       Switch#show mac-address-table 
+       Switch#show mac address-table
+       Switch#show mac-address-table interface fa 0/1
+Spanning tree, BID BPDU bridge protocol data unit
+        Switch#sh spanning-tree
+        Switch#sh spanning-tree detail
+        Switch#sh spanning-tree vlan 1-10
+Manipulowanie wartością priority
+        Switch(config)#spanning-tree vlan 1 root primary
+        Switch(config)#spanning-tree vlan 1 root secondary
+        Switch(config)#spanning-tree vlan 1 priority 16384 (n*16)
+        Switch(config-if)#spanning-tree guard root // fa 0/3, po przejęciu port LSN root--inconsistent state 2 rooty
+Sprawdzenie stanu STP
+        Switch#show spanning-tree
+        Switch#show spanning-tree summary
+Port priority
+        Switch(config)#int fa 0/1
+        Switch(config-if)#spanning-tree port-priority 64
+Cost
+        Switch(config)#int fa 0/1
+        Switch(config-if)#spanning-tree cost 13
+        Switch(config-if)#spanning-tree vlan 1cost 13
+        Switch#show spanning-tree int fa 0/1 detail
+        Switch#show spanning-tree vlan 1 detail
+Etherchannel
+        Switch(config)#interface Port-channel 1
+        Switch(config-if)#switchport mode access // dla wszystkich p
+        Switch(config)#interface range FastEthernet 0/1 - 2
+        Switch(config-if)#switchport mode access
+        Switch(config-if)#channel-group 1 mode on
+        Switch#show etherchannel summary
+        Switch(config)#int Po 1
+        Switch(config)#shut
+        Switch(config)#no shut

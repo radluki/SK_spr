@@ -1,0 +1,132 @@
+Wstępna konfiguracja http,tlenet,ssh
+	Router (config)#ip http server
+	Router (config)#ip http secure-server
+	Router (config)#username sieci privilege 15 password 0 sieci
+	Router (config-line)#privilege level 15 //w line vty 0 4
+	Router (config-line)#login local
+Wyłączenie klienta DNS
+	Router(config)#no ip domain-lookup
+	Router#terminal length 0
+Konfiguracje
+	Router#write mem
+	Router#copy running-config startup-config
+	Router#reload
+	Router#write erase // NVRAM = startowa
+adres IP interfejsu
+	Router(config)#interface FastEthernet 0/1
+	Router(config-if)#ip address 192.168.123.100 255.255.255.0
+	Router(config-if)#no shutdown
+Loopback
+	Router(config)#interface Loopback 0
+	Router(config-if)#ip address 10.0.0.1 255.255.255.0
+	Router(config-if)#no shutdown
+Sprawdzenie ustawień
+	Router#show ip int fa 0/1
+	Router#show controllers fa 0/1
+	Router#show run
+	Router#show running-config
+	Router#show startup-config
+	Router#sh users
+	Router#sh sessions
+Dalsza konfiguracja
+	Router(config)#hostname r0
+	Router#show ip interface brief
+	Router#show interfaces description
+Komunikaty systemowe 8 poziomów
+	Router(config)#logging console ?
+Ping
+	Router#ping 192.168.1.1 rep 1000
+	Router#ping 192.168.1.255 //tryb broadcast, maska /24
+CDP Cisco Discovery Protocol
+	Router#sh cdp
+	Router#sh cdp neighbors
+	Router#sh cdp neighbors detail
+	Router(config)#no cdp run
+	Router(config)# cdp run
+	Router#sh cdp interfaces
+	Router#clear cdp table
+Wyłączenie cdp w interfejsie
+	Router(config)#interface fa 0/1
+	Router(config)#no cdp enable
+prędkość i czas cdp
+	Router(config)#cdp timer 10
+	Router(config)#cdp holdtime 90
+	
+//////////////
+DHCP
+////////////
+	Router(config)#ip dhcp pool nazwa
+	Router(dhcp-config)#network 10.10.10.0 255.255.255.0
+	Router(dhcp-config)#default-router 10.10.10.1 //ustala default gateway u klienta
+	Router(dhcp-config)#dns-server 123.123.123.3
+	Router(dhcp-config)#domain-name domena.pl
+	Router(dhcp-config)#ip dhcp excluded-address 10.10.10.10 10.10.10.20
+	R2(config)#interface FastEthernet 0/0
+	R2(config-if)#ip address dhcp
+	Router#show ip dhcp binding
+Wskazanie kolejnego adresu na drodze do serwera dhcp
+	Router(config-if)#ip helper-address 200.200.200.1
+
+/////////////
+SSH
+/////////////
+	Router(config)#line vty 0 4
+	Router(config-line)#transport input ssh
+	Router(config)#username uzytkownik privilege 15 secret haslo
+	Router(config)#aaa new-model
+	Router(config)#aaa authentication login default local
+lub
+	Router(config)#line vty 0 15
+	Router(config)#login local
+hasło dla lini
+	Router(config)#aaa authentication login default enable
+	Router(config)#hostname host
+	Router(config)#ip domain-name domena
+	Router(config)#crypto key generate rsa
+	Router#show ssh
+	
+	R1(config)#router rip
+	R1(config-router)#network 192.168.11.0
+	Router(config-router)# neighbor ip-address
+//////////
+Mostkowanie
+///////////
+Legacy bridging - rutowanie IP wyłączone całkowicie
+CRB - mostek i router, odizolowane
+IRB - rutowanie do mostka za pomocą BVI (bridge Virtual Interface)
+
+Legacy bridging -> dwa interfejsy muszą być up
+	Router(config)#int fa 0/0
+	Router(config-if)#brigde-group 1
+	Router(config-if)#no ip address
+	Router(config)#exit
+	Router(config)#int fa 0/1
+	Router(config-if)#brigde-group 1
+	Router(config-if)#no ip address
+	Router(config)#exit
+	Router(config)#no ip routing
+	Router(config)#bridge 1 protocol ieee
+	Router(config)#show bridge group
+	Router(config)#show bridge
+CRB
+	Router(config)# ip routing
+	Router(config)# bridge crb
+	Router(config)# no bridge 1 route ip
+IRB
+	Router(config)# no bridge crb
+	Router(config)# bridge irb
+	Router(config)# bridge 1 bridge ip
+	bridge 1 route ip // przez bvi wszystko, lub brak bvi
+	Router(config)#interface BVI 0
+	Router(config-if)#ip address 192.168.123.101 255.255.255.0
+	Router(config-if)#no shutdown
+
+
+
+
+
+
+
+
+
+
