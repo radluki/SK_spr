@@ -1,0 +1,99 @@
+serwer:
+
+aaa new-model
+username sieci password sieci
+interface ATM 0/0
+pvc 1/35
+encapsulation aal5mux ppp Virtual-Template 1
+exit
+no sh
+exit
+interface Virtual-Template 1
+ip address 200.200.200.1 255.255.255.0
+ppp authentication pap
+exit
+
+klient:
+
+interface atm 0/0
+pvc 1/35
+encapsulation aal5mux ppp dialer
+dialer pool-member 1
+exit
+no sh
+exit
+interface dialer1
+ip address 200.200.200.3 255.255.255.0
+encapsulation ppp
+dialer pool 1
+ppp pap sent-username sieci password sieci
+exit 
+
+
+serwer:
+
+aaa new-model
+username sieci password sieci
+ip local pool pula 200.200.200.2 200.200.200.10
+interface ATM 0/0
+pvc 1/35
+encapsulation aal5mux ppp Virtual-Template 1
+exit
+no sh
+exit
+interface Virtual-Template 1
+ip address 200.200.200.1 255.255.255.0
+ppp authentication pap
+peer default ip address pool pula
+exit
+
+
+klient:
+
+interface atm 0/0
+pvc 1/35
+encapsulation aal5mux ppp dialer
+dialer pool-member 1
+exit
+no sh
+exit
+interface dialer1
+ip address negotiated
+encapsulation ppp
+dialer pool 1
+ppp pap sent-username sieci password sieci
+exit 
+
+serwer:
+
+aaa new-model
+username sieci password sieci
+bba-group pppoe global
+ virtual-template 1
+exit
+interface fa 0/0
+ pppoe enable group global
+no sh
+exit
+ip local pool pula 200.200.200.2
+200.200.200.10
+interface Virtual-Template 1
+ip address 200.200.200.1 255.255.255.0
+ppp authentication pap
+peer default ip address pool pula
+mtu 1492
+exit
+
+klient:
+
+interface dialer1
+ ip address negotiated
+ encapsulation ppp
+ dialer pool 1
+ ppp pap sent-username sieci password sieci
+ exit
+interface fa 0/0
+ no ip address
+ pppoe-client dial-pool-number 1
+ no sh
+ exit
