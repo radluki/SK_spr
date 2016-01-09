@@ -1,0 +1,64 @@
+lab 094 - Cisco Catalyst 6500 Managed CORE Switches
+Lista modółów:
+	Cisco6500(enable) show module
+	Cisco6500(enable) show inventory
+	Cisco6500(enable) show power
+
+Odcięcie zasilania:
+	Cisco6500(enable) set module power down 5
+	Cisco6500(enable) set module power up 5
+Restart:
+	Cisco6500(enable) set module shutdown 2
+Połączenie z modółem rutującym:
+	Cisco6500(enable)# switch console
+Ustawienie interfejsu IP:
+	Cisco6500Sup(enable) set interface sc0 192.168.123.10 255.255.255.0
+Włączenie interfejsu www:
+	Cisco6500Sup(enable) set ip http server enable
+	Cisco6500Sup(enable) show ip http
+Sprawdzenie ustawień:
+	Cisco6500Sup(enable)show config
+Kasowanie ustawień:
+	Cisco6500Sup(enable)clear config all
+
+Zad C - Konfiguracja VLAN
+
+Baza VLAN Switch Fabric:
+	Cisco6500Sup(enable)show vlan
+Stworzenie domeny VTP:
+	Cisco6500Sup(enable)set vtp domain nazwa
+	Cisco6500Sup(enable)set vtp mode server
+Tworzenie VLAN:
+	Cisco6500Sup(enable) set vlan 3
+Dodanie portów do VLAN:
+	Cisco6500Sup(enable) set vlan 3 4/1-10
+Kasowanie VLAN
+	Cisco6500Sup(enable) clear vlan 3
+Przynależność portu:
+	Cisco6500Sup(enable)show port 4/10
+Usuwanie portów z VLAN i (i>1):
+	Cisco6500Sup(enable) set vlan 1 4/10
+
+
+Zad D - konfiguracja modułu rutującego
+
+Połączenie:
+	Cisco6500Sup(enable) switch console
+lub:
+	Cisco6500Sup(enable) session 15
+Interfejsy IP rutera:
+	Cisco6500MSFC#sh ip int brie
+Ruter działa pod Cisco IOS
+VLAN 1 nie jest rutowalny, nie figuruje w spisie interfejsów IP, służy do konfiguracji przełącznika.
+
+Zad F - EtherChannel
+Agregacja w Admin Groups (port, admin group):
+	Cisco6500Sup(enable) set port channel 3/1-6 20
+Włączenie trybu EtherChannel:
+	Cisco6500Sup(enable) set port channel 3/1-4 mode desirable silent
+Sprawdzenie konfiguracji:
+	Cisco6500Sup(enable) show port capabilities module
+	Cisco6500Sup(enable) show port channel
+	Cisco6500Sup(enable) show port channel module/port
+	Cisco6500Sup(enable) show port channel info
+	Cisco6500Sup(enable) show spantree module/port
