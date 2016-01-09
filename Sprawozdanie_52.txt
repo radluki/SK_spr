@@ -1,0 +1,34 @@
+Zadanie A: Podstawowa konfiguracja ustawieñ prze³¹cznika Allied Telesis
+
+Dwa hosty, prz³¹cznik rutuj¹cy, TAS, switch
+
+manager$add ip interface=vlan1 ipaddress=192.168.123.163 mask=255.255.255.0 
+
+manager$add ip interface=vlan1 ipaddress=dhcp
+
+Ustalenie domyœlnej bramy:
+manager$add ip route=0.0.0.0 interfece=vlan1 nexthop=192.168.123.254
+
+Zadanie B: Konfigurowanie VLAN prze³¹cznika Allied Telesyn Rapier i rutowanie miêdzy VLAN
+
+dodawanie portów tagowanych/nietagowanych:
+manager$add vlan=nazwa port=10 frame=tagged
+manager$add vlan=nazwa port=10-11 frame=untagged
+
+
+przypisanie adresu ip do vlan:
+manager$add ip interface=vlan5 ipaddress=192.168.0.10 mask=255.255.255.0
+
+w³¹czenie rutowania RIP:
+manager$add ip rip interface=vlan5 send=rip2 receive=both
+
+
+Zadanie C: Inne podstawowe czynnoœci konfiguracyjne prze³¹czników Allied Telesyn Rapier 
+
+tworzenie trunka:
+
+manager$create switch trunk=nazwa port=10-12 
+
+port otrzymuj¹cy kopiê ruchu z innego:
+
+manager$create switch mirror destport=10 sourceport=12 
