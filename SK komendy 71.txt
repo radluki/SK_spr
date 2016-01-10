@@ -21,15 +21,37 @@ odczytywanie komunikatów wersji 1
 Router1(config-if)#ip rip send version 2
 Router2(config-if)#ip rip receive version 1
 
-statyczne dodanie drogi awaryjnej o niskim priorytecie
+statyczne dodanie drogi awaryjnej o niskim priorytecie (FailOver Route):
 Router(config)#ip route 200.200.200.0 255.255.255.0 200.200.100.5 150
+Uogólnianie rozgłaszanych informacji:
+R1(config-if)#ip summary-address rip 200.200.0.0 255.255.254.0
 
+Zad B - OSPF
+Router(config)#router ospf 150
+Router(config-router)#network 200.200.100.0 0.0.0.255 area 0 
+Router(config-router)#network 200.200.200.0 0.0.0.255 area 0
+Dla NBMA:
+Router(config-router)#neighbor 200.200.100.1
+Dla Frame Relay niezbędny Full mesh
 
+Diagnostyka:
+Router#sh ip ospf interface fa 0/0 
+Router#sh ip ospf neighbor
 
+Zmiana priorytetu (DR,BDR,DROTHER - tylko gdy nieprawda że point-to-point/multipoint):
+Router(conf)#int fa 0/0
+Router(config-int)#ip ospf priority 0 
+Router#show ip ospf interface
 
+Zmiana kosztu:
+Router(config)#interface fa 0/0 
+Router(config-if)#ip ospf cost 35
 
-
-
+Virtual Link (gdy area i nie ma połączenia z area 0, backbone):
+RuterABR1(config)#router ospf 5 
+RuterABR1(config-router)# area 1 virtual-link 5.5.5.5 //router ID przeciwległego routera
+RuterABR2(config)#router ospf 5 
+RuterABR2(config-router)# area 1 virtual-link 6.6.6.6
 
 
 

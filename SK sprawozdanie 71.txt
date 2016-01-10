@@ -11,7 +11,7 @@ R2(config)#router ospf 4
 R2(config-router)# redistribute rip metric 120 subnets //ospf widzi rip
 Sprawdziliśmy działanie, układ działał.
 zad D Tunnel GRE
-Połączyliśmy 3 routery szeregowo. Router R2 symulował internet, nie był przez nas modyfikowany. W routerach 1 i 3 włączyliśmy loopbacki, ustawiliśmy adresy interfejsów i powłączaliśmy je. Uruchomiliśmy Tunnel 0.
+Połączyliśmy 3 routery szeregowo. Router R2 symulował internet (i nie miał skonfigurowanego ospf), nie był przez nas modyfikowany. W routerach 1 i 3 włączyliśmy loopbacki, ustawiliśmy adresy interfejsów i powłączaliśmy je. Uruchomiliśmy Tunnel 0.
 R1(config)#interface Tunnel 0
 R1(config-if)#tunnel source FastEthernet0/0
 R1(config-if)#ip address 192.168.5.1 255.255.255.0

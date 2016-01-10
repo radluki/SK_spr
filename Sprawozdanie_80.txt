@@ -1,12 +1,12 @@
-Zadanie A: Rutowanie przy u¿yciu regu³ definiowanych statycznie
+Zadanie A: Rutowanie przy uÂ¿yciu reguÂ³ definiowanych statycznie
 
 ip routing
-ip classless  (bez-klasowe, bez narzucania wielkoœci maski poprzez klasê adresu IP)
+ip classless  (bez-klasowe, bez narzucania wielkoÂœci maski poprzez klasÃª adresu IP)
 ip route 0.0.0.0 0.0.0.0 100.100.102.1
 ip route 100.100.100.0 255.255.255.0 100.100.102.1
 gdzie 100.100.100.0 to adres sieci docelowej dla datagramu, 255.255.255.0 to
-maska tej sieci, a 100.100.102.1 to adres interfejsu nastêpnego rutera, na który
-nale¿y wys³aæ wspomniany datagram (dalej do sieci 100.100.100.0).
+maska tej sieci, a 100.100.102.1 to adres interfejsu nastÃªpnego rutera, na ktÃ³ry
+naleÂ¿y wysÂ³aÃ¦ wspomniany datagram (dalej do sieci 100.100.100.0).
 clear ip route *
 router rip 
 redistribute static
@@ -44,7 +44,7 @@ R2(config-if)#no ip route-cache
 R2(config-if)#ip policy route-map mapa1
 
 
-Zadanie C: Redundancja ruterów - Cisco HSRP (Hot Standby
+Zadanie C: Redundancja ruterÃ³w - Cisco HSRP (Hot Standby
 Routing Protocol), VRRP (Virtual Routing Redundancy Protocol) 
 
 R1(config)#int fa 0/1
@@ -58,17 +58,17 @@ R2(config-if)#ip address 192.168.123.151 255.255.255.0
 R2(config-if)#standby 1 ip 192.168.123.160
 R2(config-if)#standby 1 priority 90
 R2(config-if)#standby 1 preempt
-gdzie 1 to numer grupy standby, 192.168.123.160 to migruj¹cy miêdzy ruterami
+gdzie 1 to numer grupy standby, 192.168.123.160 to migrujÂ¹cy miÃªdzy ruterami
 wirtualny adres IP.
 
-ró¿ne priorytety standby (wiêksza wartoœæ ma pierwszeñstwo) oraz cechê preempt standby (powoduj¹c¹, ¿e 
-priorytety rozliczane s¹ natychmiast, czyli wa¿niejszy ruter powracaj¹c z awarii
-przejmie z powrotem rolê active)
+rÃ³Â¿ne priorytety standby (wiÃªksza wartoÂœÃ¦ ma pierwszeÃ±stwo) oraz cechÃª preempt standby (powodujÂ¹cÂ¹, Â¿e 
+priorytety rozliczane sÂ¹ natychmiast, czyli waÂ¿niejszy ruter powracajÂ¹c z awarii
+przejmie z powrotem rolÃª active)
 
 R1(config-if)#standby 1 priority 30
 
 
-analogicznie, jak w przypadku poprzednim okreœl wirtualny adres IP, cechê
+analogicznie, jak w przypadku poprzednim okreÂœl wirtualny adres IP, cechÃª
 preempt i priorytet dla VRRP w obydwu ruterach, np.:
 R1(config)#int fa 0/1
 R1(config-if)#vrrp 1 ip 192.168.123.160
@@ -79,6 +79,34 @@ R2(config-if)#vrrp 1 ip 192.168.123.160
 R2(config-if)#vrrp 1 priority 100
 R2(config-if)#vrrp 1 preempt
 
+Autentyfikacja dla kaÅ¼dego rutera taka sama (takÅ¼e HSRP):
+R1(config)#key chain klucz 
+R1(config-keychain)# key 1 
+R1(config-keychain-key)#key-string klucz 
+R1(config-keychain-key)#exit 
+R1(config-keychain)#exit 
+R1(config)#int fa 0/1 
+R1(config-if)#vrrp 1 authentication md5 key-chain klucz
 
 
+Åšledzenie portu:
+R1(config)#track 1 int fa 0/0 line-protocol
+Zmniejszenie priorytetu oparte na awarii Å›ledzonego portu:
+R1(config)#int fa 0/1
+R1(config-if)#vrrp 4 track 1 decrement 20 //zmniejsza o 20
+
+SLA - Service Level Agreement
+Wykrywanie awarii i modyfikowanie drogi routingu
+Monitorowanie:
+Router(config)#ip sla 5
+Router(config-sla-monitor)# icmp-echo 200.200.200.1 source-interface  FastEthernet0/0 
+Router(config-sla-monitor)#timeout 1000 
+Router(config-sla-monitor)#threshold 2 
+Router(config-sla-monitor)#frequency 3 
+Router(config-sla-monitor)#exit 
+Router(config)#ip sla schedule 5 life forever start-time now
+Rutowanie:
+Router(config)#track 11 rtr 5 reachability
+Router(config)#ip route 0.0.0.0 0.0.0.0 200.200.200.1 track 11 
+Router(config)#ip route 0.0.0.0 0.0.0.0 200.200.200.2 7
 
